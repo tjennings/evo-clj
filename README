@@ -1,0 +1,4 @@
+This toy is a genetic programming engine written in Clojure.  It is a port of another toy engine I wrote in Java called Evo,
+which is also available on Github.
+
+Distributed under the Eclipse Public License, the same as Clojure.
