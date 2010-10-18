@@ -25,7 +25,7 @@
       (some #{(random-terminal grammar)} '[x y])))
   (it "pulls out a random terminal - of constants"
     (let [grammar (defgrammar {:constants [3.14]})]
-      (some #{(random-terminal grammar)} [3.14]))) 
+      (some #{(random-terminal grammar)} [3.14])))
   (it "pulls out a random function"
     (let [grammar (defgrammar {:functions [- * /]})]
       (some #{(random-function grammar)} [- * /])))
@@ -35,6 +35,21 @@
   (it "allows mixed static constants and random constants"
     (let [grammar (defgrammar {:constants [3.14 10 (rand-const)]})
           random-constants (map (fn [_] (random-terminal grammar)) (range 0 10000))]
-      (include-all #{3.14 10} random-constants)))
-)
+      (include-all #{3.14 10} random-constants))))
+
+(describe "the evaluator"
+  (it "returns an error of 0 for a perfect solution"
+    (let [evaluate (defevaluator {{'X 0} 0})]
+      (= 0 (evaluate '(do X)))
+      (= 0 (evaluate '(* X X)))
+      (= 0 (evaluate '(+ X X)))))
+  (it "returns the actual error amount for imperfect solutions to a 1-sample problem"
+    (let [evaluate (defevaluator {{'X 0} 0})]
+      (= 1 (evaluate '(+ X 1)))
+      (= 4 (evaluate '(* (+ X 2) (+ X 2))))))
+  (it "returns the correct error amount where y = 1"
+    (let [evaluate (defevaluator {{'y 1} 2})]
+      (= 0 (evaluate '(+ y 1)))
+      (= 0 (evaluate '(* (+ y 1) y))))))
+
 
