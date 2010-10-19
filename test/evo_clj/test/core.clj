@@ -50,6 +50,16 @@
   (it "returns the correct error amount where y = 1"
     (let [evaluate (defevaluator {{'y 1} 2})]
       (= 0 (evaluate '(+ y 1)))
-      (= 0 (evaluate '(* (+ y 1) y))))))
-
+      (= 0 (evaluate '(* (+ y 1) y)))))
+  (it "returns the correct error amount with multiple variables"
+    (let [evaluate (defevaluator {{'x 2 'y 3} 6})]
+      (= 0 (evaluate '(* x 3)))
+      (= 0 (evaluate '(* y 2)))
+      (= 0 (evaluate '(+ x y 1)))))
+  (it "returns the correct error amount with multiple variables and criteria"
+    (let [evaluate (defevaluator {{'x 2 'y 3} 6
+                                  {'x 4 'y 6} 11})]
+      (= 1 (evaluate '(* x 3)))
+      (= 1 (evaluate '(* y 2)))
+      (= 0 (evaluate '(+ x y 1))))))
 
