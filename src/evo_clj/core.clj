@@ -1,5 +1,4 @@
-(ns evo-clj.core
-  (:require [clojure.walk :as walk]))
+(ns evo-clj.core)
 
 (defn defgrammar [args] args)
 
@@ -34,11 +33,13 @@
         this-value (givens-map form)]
     (or this-value form)))
 
+(defn map-to-bindings [m]
+  (vec (flatten (into [] (first m)))))
+
 (defn- evaluate-given [expression criteria]
   (- (eval
-       (walk/postwalk
-         (partial value-from-criteria criteria)
-         expression))
+       `(let ~(map-to-bindings criteria)
+             ~expression))
      (result criteria)))
 
 (defn defevaluator [all-criteria]
