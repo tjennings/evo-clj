@@ -36,10 +36,12 @@
 (defn map-to-bindings [m]
   (vec (mapcat identity (first m))))
 
+(defn context-eval [context expression]
+  (eval `(let ~(map-to-bindings context)
+              ~expression)))
+
 (defn- evaluate-given [expression criteria]
-  (- (eval
-       `(let ~(map-to-bindings criteria)
-             ~expression))
+  (- (context-eval criteria expression)
      (result criteria)))
 
 (defn defevaluator [all-criteria]
