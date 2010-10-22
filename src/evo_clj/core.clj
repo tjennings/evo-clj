@@ -34,7 +34,7 @@
     (or this-value form)))
 
 (defn map-to-bindings [m]
-  (vec (flatten (into [] (first m)))))
+  (vec (mapcat identity (first m))))
 
 (defn- evaluate-given [expression criteria]
   (- (eval
